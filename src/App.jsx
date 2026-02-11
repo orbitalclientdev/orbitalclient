@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import Player from './components/Player';
 import Track from './components/Track';
@@ -29,21 +28,33 @@ function GameLoop() {
 
 export default function App() {
   const nudgeLane = useGameStore((s) => s.nudgeLane);
-  const gameOver = useGameStore((s) => s.gameOver);
-  const resetGame = useGameStore((s) => s.resetGame);
+  const phase = useGameStore((s) => s.phase);
+  const startGame = useGameStore((s) => s.startGame);
+  const resetToStart = useGameStore((s) => s.resetToStart);
 
   useEffect(() => {
     const onKeyDown = (event) => {
       const key = event.key.toLowerCase();
 
+      if (phase === 'start' && [' ', 'enter'].includes(key)) {
+        event.preventDefault();
+        startGame();
+      }
+
+      if (phase === 'gameover' && ['r', 'enter'].includes(key)) {
+        event.preventDefault();
+        resetToStart();
+      }
+
+      if (phase !== 'playing') return;
+
       if (['arrowleft', 'a'].includes(key)) nudgeLane(-1);
       if (['arrowright', 'd'].includes(key)) nudgeLane(1);
-      if (key === 'r' && gameOver) resetGame();
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [nudgeLane, gameOver, resetGame]);
+  }, [nudgeLane, phase, resetToStart, startGame]);
 
   return (
     <>

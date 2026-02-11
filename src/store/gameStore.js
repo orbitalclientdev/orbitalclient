@@ -11,8 +11,8 @@ const randomId = () =>
 const createObstacle = () => ({
   id: randomId(),
   lane: Math.floor(Math.random() * 3),
-  z: -80,
-  size: 1.2 + Math.random() * 1.1
+  z: -55,
+  size: 1.1 + Math.random() * 1.2
 });
 
 const intersectsAABB = (playerX, obstacle) => {
@@ -29,11 +29,11 @@ const intersectsAABB = (playerX, obstacle) => {
 
 export const useGameStore = create((set, get) => ({
   speed: 24,
+  phase: 'start',
   targetLane: 1,
   playerX: 0,
   score: 0,
-  gameOver: false,
-  spawnTimer: 0.85,
+  spawnTimer: 0.8,
   obstacles: [],
 
   setTargetLane: (lane) => set({ targetLane: Math.max(0, Math.min(2, lane)) }),
@@ -43,18 +43,28 @@ export const useGameStore = create((set, get) => ({
   },
   setPlayerX: (x) => set({ playerX: x }),
 
+  startGame: () =>
+    set({
+      phase: 'playing',
+      score: 0,
+      targetLane: 1,
+      playerX: 0,
+      spawnTimer: 0.5,
+      obstacles: [createObstacle()]
+    }),
+
   step: (delta) => {
     const state = get();
-    if (state.gameOver) return;
+    if (state.phase !== 'playing') return;
 
     let spawnTimer = state.spawnTimer - delta;
     const nextObstacles = state.obstacles
       .map((obs) => ({ ...obs, z: obs.z + state.speed * delta }))
-      .filter((obs) => obs.z < 10);
+      .filter((obs) => obs.z < 12);
 
     if (spawnTimer <= 0) {
       nextObstacles.push(createObstacle());
-      spawnTimer = 0.55 + Math.random() * 0.5;
+      spawnTimer = 0.55 + Math.random() * 0.45;
     }
 
     const collision = nextObstacles.some((obs) => intersectsAABB(state.playerX, obs));
@@ -63,17 +73,17 @@ export const useGameStore = create((set, get) => ({
       obstacles: nextObstacles,
       spawnTimer,
       score: state.score + delta * 10,
-      gameOver: collision
+      phase: collision ? 'gameover' : state.phase
     });
   },
 
-  resetGame: () =>
+  resetToStart: () =>
     set({
+      phase: 'start',
       targetLane: 1,
       playerX: 0,
       score: 0,
-      gameOver: false,
-      spawnTimer: 0.85,
+      spawnTimer: 0.8,
       obstacles: []
     })
 }));
