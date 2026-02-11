@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { LANE_X, useGameStore } from '../store/gameStore';

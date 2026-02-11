@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import Player from './components/Player';

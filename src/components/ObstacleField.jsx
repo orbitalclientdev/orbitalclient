@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMemo, useRef } from 'react';
 import { Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';

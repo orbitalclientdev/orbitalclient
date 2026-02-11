@@ -1,3 +1,4 @@
+import React from 'react';
 import { useGameStore } from '../store/gameStore';
 
 export default function HUD() {
