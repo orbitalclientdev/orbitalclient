@@ -1,0 +1,48 @@
+:root,
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #090d16;
+  color: #fff;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+.hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.score {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 10px;
+  justify-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: auto;
+}
+
+.overlay button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+}
